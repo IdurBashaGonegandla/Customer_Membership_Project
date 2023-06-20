@@ -77,34 +77,7 @@
   
    </table>
    <br/>
-   <!--  
-  <table border="1" align="center">
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Mobile</th>
-        <th>Actions</th>      
-      </tr>
-      
-       <%
-      ArrayList<Customer> alCustomer = (ArrayList<Customer>)request.getAttribute("al");
-      
-      for(Customer i: alCustomer)
-      {
-    	 out.println("<tr>");
-    	   out.println("<td>"+  i.getId()+"</td>");
-    	   out.println("<td>"+  i.getName()+"</td>");
-    	   out.println("<td>"+  i.getEmail()+"</td>");
-    	   out.println("<td>"+  i.getMobile()+"</td>");
-    	   out.println("<td>"+  "<a>Edit</a> &nbsp;&nbsp; <a>Delete</a>"+"</td>");
-    	 
-    	 out.println("</tr>");
-      }
-      %> 
-     
-   </table>
-   -->
+
    
 </div>
 
