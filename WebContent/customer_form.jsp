@@ -21,7 +21,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Customer</a>
+          <a class="nav-link active" aria-current="page" href="table">Customer</a>
         </li>
       </ul>     
     </div>
@@ -37,14 +37,14 @@
    <c:if test="${customer == null }">
 
      <form action="add" method="post">
-     <h2>Add Customer</h2>
+     <h2 style="color:red">Add Customer</h2>
      
   </c:if>
   
   <c:if test="${customer != null }">
   
    <form action="edit" method="post">
-   <h2>Edit Customer</h2>
+   <h2  style="color:red" >Edit Customer</h2>
   
   </c:if>
  

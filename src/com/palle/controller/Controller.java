@@ -10,11 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.palle.dao.AdminDao;
 import com.palle.dao.CustomerDao;
 import com.palle.model.Customer;
 
 @WebServlet("/")
-public class CustomerController extends HttpServlet {
+public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException 
@@ -38,12 +39,74 @@ public class CustomerController extends HttpServlet {
 		case "/add":
 			addCustomer(request, response);
 			break;
+		case "/list":
+			validateAdmin(request, response);
+			break;
+		case "/table":
+			getCustomerListPage(request, response);
+			break;
+			
+
 		default:
 			getStartUpPage(request, response);
 			break;
 
 		}
 
+	}
+	private void getCustomerListPage(HttpServletRequest request, HttpServletResponse response)
+	{
+		try 
+		{
+			ArrayList<Customer> alCustomer = CustomerDao.getAllCustomers();
+	
+			RequestDispatcher rd = request.getRequestDispatcher("customer_list.jsp");
+			request.setAttribute("al", alCustomer);
+			rd.forward(request, response);
+		} 
+		catch (ServletException e) 
+		{
+
+			e.printStackTrace();
+		}
+		catch (IOException e) 
+		{
+
+			e.printStackTrace();
+		}
+		
+	}
+	private void validateAdmin(HttpServletRequest request, HttpServletResponse response )
+	{
+		// Read the username and password
+		String u = request.getParameter("tbUser");
+		String p = request.getParameter("tbPass");
+		 
+		
+		// call the dao method to validate admin
+		boolean res = AdminDao.validateAdmin(u , p);
+		
+		//Condition to redirect admin to list page
+		if(res)
+		{
+			getCustomerListPage(request, response);
+		}
+		else 
+		{
+			//getStartUpPage(request, response);
+			
+			try 
+			{
+				response.sendRedirect(request.getContextPath()+"/default");
+			} catch (IOException e) 
+			{
+				
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
 	}
 
 	private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) 
@@ -54,16 +117,7 @@ public class CustomerController extends HttpServlet {
 		// call the dao method to delete the row in dataBase
 		CustomerDao.deleteCustomer(i);
 		
-		// Redirect user to customer_list page
-		try 
-		{
-			response.sendRedirect("list");
-		} 
-		catch (IOException e)
-		{
-			
-			e.printStackTrace();
-		}
+		getCustomerListPage(request, response);
 	}
 
 	private void editCustomer(HttpServletRequest request, HttpServletResponse response) 
@@ -77,17 +131,7 @@ public class CustomerController extends HttpServlet {
 		
 		CustomerDao.editCustomer(c);
 		
-		// Redirect user to customer list page
-	    try 
-	    {
-			response.sendRedirect("list");
-		}
-	    catch (IOException e1) 
-	    {
-			
-			e1.printStackTrace();
-		}
-		
+		getCustomerListPage(request, response);
 		
 		
 		
@@ -153,33 +197,25 @@ public class CustomerController extends HttpServlet {
 		CustomerDao.addCustomer(c);
 
 		// Redirect Admin to HomePage(customer_list page)
-		getStartUpPage(request, response);
+		getCustomerListPage(request, response);
+		
 
 		
 	}
 
 	private void getStartUpPage(HttpServletRequest request, HttpServletResponse response) {
 
-		try 
-		{
-			ArrayList<Customer> alCustomer = CustomerDao.getAllCustomers();
-	
-			RequestDispatcher rd = request.getRequestDispatcher("customer_list.jsp");
-
-			request.setAttribute("al", alCustomer);
-
+		RequestDispatcher rd = request.getRequestDispatcher("admin_login.jsp");
+		try {
 			rd.forward(request, response);
-		} 
-		catch (ServletException e) 
-		{
-
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (IOException e) 
-		{
-
-			e.printStackTrace();
-		}
+		
 
 	}
 
